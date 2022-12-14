@@ -13,9 +13,10 @@ function initData(vm) {
   vm._data = data; //将劫持的get set放在_data上
   //数据劫持，vue2 使用了defineProperty
   observer(data);
+
   Object.keys(data).forEach((key) => Proxy(vm, "_data", key));
 }
-function Proxy(vm, target, key) {
+  function Proxy(vm, target, key) {
   Object.defineProperty(vm, key, {
     get() {
       return vm[target][key];
