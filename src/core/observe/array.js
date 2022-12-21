@@ -15,13 +15,11 @@ methods.forEach((method) => {
     //新值监控
     switch (method) {
       case "push":
+      case "unshift":
         inserted = rest;
         break;
       case "splice":
         inserted = rest.slice(2);
-        break;
-      case "unshift":
-        inserted = rest;
         break;
 
       default:
