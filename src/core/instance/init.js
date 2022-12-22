@@ -1,5 +1,6 @@
 import { compileToFunction } from "../../compiler";
 import { initState } from "./state";
+import { mpuntComponent } from "./lifecycle";
 
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
@@ -30,11 +31,11 @@ export function initMixin(Vue) {
       }
       if (template) {
         const render = compileToFunction(template);
-        ops.render = render;//jsx编译成h()
+        ops.render = render; //jsx编译成h()
       }
     }
-    ops.render;
-
     //runtime没有模板编译,不能使用template，编译过程是通过loader来转移vue文件。
+    console.log(ops.render)
+    mpuntComponent(vm, el);
   };
 }
