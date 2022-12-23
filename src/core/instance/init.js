@@ -1,6 +1,6 @@
 import { compileToFunction } from "../../compiler";
 import { initState } from "./state";
-import { mpuntComponent } from "./lifecycle";
+import { mountComponent } from "./lifecycle";
 
 export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
@@ -16,15 +16,15 @@ export function initMixin(Vue) {
   };
   Vue.prototype.$mount = function (el) {
     const vm = this;
-    const ele = document.querySelector(el);
+    el = document.querySelector(el);
     let ops = vm.$options;
     if (!ops.render) {
       let template;
       if (!ops.template && el) {
         //使用el挂载的
-        template = ele.outerHTML;
+        template = el.outerHTML;
       } else {
-        if (ele) {
+        if (el) {
           //使用template
           template = ops.template;
         }
@@ -35,7 +35,6 @@ export function initMixin(Vue) {
       }
     }
     //runtime没有模板编译,不能使用template，编译过程是通过loader来转移vue文件。
-    console.log(ops.render)
-    mpuntComponent(vm, el);
+    mountComponent(vm, el);
   };
 }
