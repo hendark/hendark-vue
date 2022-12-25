@@ -1,4 +1,5 @@
 import { newArrProto } from "./array";
+import Dep from "./dep";
 
 class Observer {
   constructor(data) {
@@ -28,16 +29,23 @@ class Observer {
 
 export function defineReactive(target, key, value) {
   observer(value); //递归对所有对象劫持
+  let dep = new Dep();
   Object.defineProperty(target, key, {
     get() {
+      if (Dep.target) {
+        dep.depend();
+      }
+      console.log('---------get-------',value);
       return value;
     },
     set(newValue) {
+      console.log('---------set-------',newValue)
       if (newValue === value) {
         return;
       }
       observer(newValue);
       value = newValue;
+      dep.notify();
     },
   });
 }

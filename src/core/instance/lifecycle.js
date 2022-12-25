@@ -1,3 +1,4 @@
+import Watcher from "../observe/watcher";
 import { createElement, createTextVNode } from "../vdom";
 function createElm(vnode) {
   let { tag, data, children, text } = vnode;
@@ -36,21 +37,20 @@ function patch(oldVNode, vnode) {
 
     const parentElm = elm.parentNode;
     const newElm = createElm(vnode);
-    parentElm.insertBefore(newElm,elm.nextSibling);
+    parentElm.insertBefore(newElm, elm.nextSibling);
     parentElm.removeChild(elm);
     return newElm;
-  }else{
-    //TODO  diff 
+  } else {
+    //TODO  diff
   }
 }
 export function initLifeCycle(Vue) {
   Vue.prototype._update = function (vnode) {
     const vm = this;
     const el = vm.$el;
-    
+
     // 初始化和更新功能
     vm.$el = patch(el, vnode);
-    console.log("update", vnode, vm.$el);
   };
   Vue.prototype._render = function () {
     const vm = this;
@@ -71,10 +71,11 @@ export function initLifeCycle(Vue) {
 export function mountComponent(vm, el) {
   vm.$el = el;
 
-  // 1.调用render方法产生虚拟节点 虚拟dom
-  const vnode = vm._render();
-
-  // 2.虚拟dom转为真实dom
-  vm._update(vnode);
+  // 1.vm._render ast语法树生成虚拟dom
+  // 2.vm._update 虚拟dom转为真实dom
+  const updateComponent = () => {
+    vm._update(vm._render());
+  };
+  const watcher = new Watcher(vm, updateComponent, true);
   // 3.插入到el元素中
 }

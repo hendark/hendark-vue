@@ -1,8 +1,10 @@
 import { compileToFunction } from "../../compiler";
 import { initState } from "./state";
 import { mountComponent } from "./lifecycle";
+import nextTick from "../util/next-tick";
 
 export function initMixin(Vue) {
+  Vue.prototype.$nextTick = nextTick;
   Vue.prototype._init = function (options) {
     const vm = this;
     vm.$options = options;
