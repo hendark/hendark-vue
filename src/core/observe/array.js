@@ -28,7 +28,6 @@ methods.forEach((method) => {
     if (inserted) {
       ob.observerArray(inserted);
     }
-
     return arr;
   };
 });
