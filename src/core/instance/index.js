@@ -1,3 +1,4 @@
+import { initGlobalAPI } from "../gloabl-api";
 import { initMixin } from "./init";
 import { initLifeCycle } from "./lifecycle";
 
@@ -7,6 +8,8 @@ function Vue(options) {
 
 initMixin(Vue);
 initLifeCycle(Vue);
+initGlobalAPI(Vue);
+
 export default Vue;
 
 /* 

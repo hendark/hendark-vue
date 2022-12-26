@@ -79,3 +79,10 @@ export function mountComponent(vm, el) {
   const watcher = new Watcher(vm, updateComponent, true);
   // 3.插入到el元素中
 }
+
+export function callHook(vm, hook) {
+  const handlers = vm.$options[hook];
+  if (handlers) {
+    handlers.forEach((handler) => handler.call(vm));
+  }
+}

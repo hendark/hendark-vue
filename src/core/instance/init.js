@@ -1,17 +1,20 @@
 import { compileToFunction } from "../../compiler";
 import { initState } from "./state";
-import { mountComponent } from "./lifecycle";
+import { callHook, mountComponent } from "./lifecycle";
 import nextTick from "../util/next-tick";
+import { mergeOptions } from "../util/options";
 
 export function initMixin(Vue) {
   Vue.prototype.$nextTick = nextTick;
   Vue.prototype._init = function (options) {
     const vm = this;
-    vm.$options = options;
+    vm.$options = mergeOptions(this.constructor.options, options);
+    // vm.$options = options
 
+    callHook(vm, "beforeCreate");
     //初始化状态，创建属性的get set
     initState(vm);
-
+    callHook(vm, "created");
     if (options.el) {
       vm.$mount(options.el);
     }
