@@ -9,8 +9,7 @@ export function initMixin(Vue) {
   Vue.prototype._init = function (options) {
     const vm = this;
     vm.$options = mergeOptions(this.constructor.options, options);
-    // vm.$options = options
-
+    
     callHook(vm, "beforeCreate");
     //初始化状态，创建属性的get set
     initState(vm);

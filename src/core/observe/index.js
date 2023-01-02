@@ -3,6 +3,9 @@ import Dep from "./dep";
 
 class Observer {
   constructor(data) {
+    // Observer实例加属性监听dep，便于对象数组新增属性触发更新视图
+    this.dep = new Dep();
+
     //把当前Observer实例赋值到data上，调用newArrProto时，data是其的this指针指向
     Object.defineProperty(data, "__ob__", {
       value: this,
@@ -27,13 +30,29 @@ class Observer {
   }
 }
 
+// 数组递归给深层数组加dep监听
+function dependArray(value){
+    value.forEach(cur=>{
+      cur.__ob__?.dep.depend();
+      if(Array.isArray(cur)){
+        dependArray(cur)
+      }
+    })
+}
+
 export function defineReactive(target, key, value) {
-  observer(value); //递归对所有对象劫持
+  let childOb = observer(value); //递归对所有对象劫持
   let dep = new Dep();
   Object.defineProperty(target, key, {
     get() {
       if (Dep.target) {
         dep.depend();
+        if(childOb){
+          childOb.dep.depend();
+          if(Array.isArray(value)){
+            dependArray(value)
+          }
+        }
       }
       console.log('---------get-------',value);
       return value;
